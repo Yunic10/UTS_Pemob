@@ -29,13 +29,14 @@ class _ListDataState extends State<ListData> {
 
   Future<void> fetchData() async {
     final response = await http.get(Uri.parse(url));
+    print(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       setState(() {
         dataTransaksi = List<Map<String, String>>.from(data.map((item) {
           return {
             'nama': item['nama'] as String,
-            'jumlah' : item['jumlah'] as int,
+            'jumlah' : item['jumlah'] as String,
             'catatan': item['catatan'] as String,
             'id': item['id'] as String,
           };

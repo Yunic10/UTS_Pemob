@@ -78,6 +78,12 @@ class _EditDataState extends State<EditData> {
               ),
             ),
             TextField(
+              controller: jumlahController,
+              decoration: const InputDecoration(
+                hintText: 'jumlah',
+              ),
+            ),
+            TextField(
               controller: catatanController,
               decoration: const InputDecoration(
                 hintText: 'catatan',

@@ -4,26 +4,26 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-class DetailMahasiswa extends StatefulWidget {
+class DetailTransaksi extends StatefulWidget {
   final dynamic id;
-  const DetailMahasiswa({super.key, this.id});
+  const DetailTransaksi({super.key, this.id});
 
   @override
-  State<DetailMahasiswa> createState() => _DetailMahasiswaState();
+  State<DetailTransaksi> createState() => _DetailTransaksiState();
 }
 
-class _DetailMahasiswaState extends State<DetailMahasiswa> {
-  Map<String, dynamic> dataMahasiswa = {};
+class _DetailTransaksiState extends State<DetailTransaksi> {
+  Map<String, dynamic> dataTransaksi = {};
   String url = Platform.isAndroid
-      ? 'http://10.0.2.2:70/Flutter/index.php'
-      : 'http://localhost:70/Flutter/index.php';
+      ? 'http://10.0.2.2:70/Flutter1/index.php'
+      : 'http://localhost:70/Flutter1/index.php';
 
   Future<dynamic> getData(dynamic id) async {
     final response = await http.get(Uri.parse("$url?id=$id"));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
       setState(() {
-        dataMahasiswa = {"nama": data['nama'], "jurusan": data['jurusan']};
+        dataTransaksi = {"nama": data['nama'],"jumlah": data['jumlah'], "catatan": data['catatan']};
       });
     } else {
       return null;
@@ -41,15 +41,17 @@ class _DetailMahasiswaState extends State<DetailMahasiswa> {
     return Scaffold(
       drawer: SideMenu(),
       appBar: AppBar(
-        title: Text("Detail Data Mahasiswa"),
+        title: Text("Detail Data Transaksi"),
       ),
       body: Container(
         padding: EdgeInsets.all(15),
         child: Column(
           children: [
-            Text("Nama : ${dataMahasiswa['nama']} "),
+            Text("Nama Transaksi: ${dataTransaksi['nama']} "),
             SizedBox(height: 10,),
-            Text("Jurusan : ${dataMahasiswa['jurusan']}")
+            Text("Jumlah Transaksi: ${dataTransaksi['jumlah']} "),
+            SizedBox(height: 10,),
+            Text("Catatan : ${dataTransaksi['catatan']}")
           ],
         ),
       ),

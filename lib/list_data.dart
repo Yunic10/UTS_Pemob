@@ -17,10 +17,10 @@ class ListData extends StatefulWidget {
 }
 
 class _ListDataState extends State<ListData> {
-  List<Map<String, String>> dataMahasiswa = [];
+  List<Map<String, String>> dataTransaksi = [];
   String url = Platform.isAndroid
-      ? 'http://10.0.2.2:70/Flutter/index.php'
-      : 'http://localhost:70/Flutter/index.php';
+      ? 'http://10.0.2.2:70/Flutter1/index.php'
+      : 'http://localhost:70/Flutter1/index.php';
   @override
   void initState() {
     super.initState();
@@ -32,10 +32,11 @@ class _ListDataState extends State<ListData> {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       setState(() {
-        dataMahasiswa = List<Map<String, String>>.from(data.map((item) {
+        dataTransaksi = List<Map<String, String>>.from(data.map((item) {
           return {
             'nama': item['nama'] as String,
-            'jurusan': item['jurusan'] as String,
+            'jumlah' : item['jumlah'] as int,
+            'catatan': item['catatan'] as String,
             'id': item['id'] as String,
           };
         }));
@@ -58,7 +59,7 @@ class _ListDataState extends State<ListData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List Data Mahasiswa'),
+        title: const Text('List Data Transaksi'),
       ),
       drawer: const SideMenu(),
       body: Column(children: <Widget>[
@@ -71,16 +72,16 @@ class _ListDataState extends State<ListData> {
               ),
             );
           },
-          child: const Text('Tambah Data Mahasiswa'),
+          child: const Text('Tambah Data Transaksi'),
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: dataMahasiswa.length,
+            itemCount: dataTransaksi.length,
             itemBuilder: (context, index) {
-              var id = dataMahasiswa[index]['id'];
+              var id = dataTransaksi[index]['id'];
               return ListTile(
-                title: Text(dataMahasiswa[index]['nama']!),
-                subtitle: Text('Jurusan: ${dataMahasiswa[index]['jurusan']}'),
+                title: Text(dataTransaksi[index]['nama']!),
+                subtitle: Text('jumlah: ${dataTransaksi[index]['jumlah']}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -88,7 +89,7 @@ class _ListDataState extends State<ListData> {
                       icon: Icon(Icons.visibility),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => DetailMahasiswa(id: id)));
+                            builder: (context) => DetailTransaksi(id: id)));
                       },
                     ),
                     IconButton(

@@ -15,16 +15,17 @@ class TambahData extends StatefulWidget {
 
 class _TambahDataState extends State<TambahData> {
   final namaController = TextEditingController();
-  final jurusanController = TextEditingController();
+  final jumlahController = TextEditingController();
+  final catatanController = TextEditingController();
 
-  Future postData(String nama, String jurusan) async {
+  Future postData(String nama, int jumlah,String catatan) async {
     // print(nama);
     String url = Platform.isAndroid
-        ? 'http://10.0.2.2:70/Flutter/index.php'
-        : 'http://localhost:70/Flutter/index.php';
+        ? 'http://10.0.2.2:70/Flutter1/index.php'
+        : 'http://localhost:70/Flutter1/index.php';
 
     Map<String, String> headers = {'Content-Type': 'application/json'};
-    String jsonBody = '{"nama": "$nama", "jurusan": "$jurusan"}';
+    String jsonBody = '{"nama": "$nama", "jumlah": "$jumlah" ,"catatan": "$catatan"}';
     var response = await http.post(
       Uri.parse(url),
       headers: headers,
@@ -42,7 +43,7 @@ class _TambahDataState extends State<TambahData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tambah Data Mahasiswa'),
+        title: const Text('Tambah Data Transaksi'),
       ),
       drawer: const SideMenu(),
       body: Container(
@@ -53,23 +54,30 @@ class _TambahDataState extends State<TambahData> {
             TextField(
               controller: namaController,
               decoration: const InputDecoration(
-                hintText: 'Nama Mahasiswa',
+                hintText: 'Nama Transaksi',
               ),
             ),
             TextField(
-              controller: jurusanController,
+              controller: jumlahController,
               decoration: const InputDecoration(
-                hintText: 'Jurusan',
+                hintText: 'Jumlah Transaksi',
+              ),
+            ),
+            TextField(
+              controller: catatanController,
+              decoration: const InputDecoration(
+                hintText: 'Catatan',
               ),
             ),
             ElevatedButton(
-              child: const Text('Tambah Mahasiswa'),
+              child: const Text('Tambah Transaksi'),
               onPressed: () {
                 print("Hello");
                 String nama = namaController.text;
-                String jurusan = jurusanController.text;
+                int jumlah = int.parse(jumlahController.text);
+                String catatan = catatanController.text;
                 // print(nama);
-                postData(nama, jurusan).then((result) {
+                postData(nama, jumlah, catatan).then((result) {
                   //print(result['pesan']);
                   if (result['pesan'] == 'berhasil') {
                     showDialog(

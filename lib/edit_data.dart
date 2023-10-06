@@ -18,16 +18,17 @@ class EditData extends StatefulWidget {
 
 class _EditDataState extends State<EditData> {
   final namaController = TextEditingController();
-  final jurusanController = TextEditingController();
+  final jumlahController = TextEditingController();
+  final catatanController = TextEditingController();
 
   String url = Platform.isAndroid
-      ? 'http://10.0.2.2:70/Flutter/index.php'
-      : 'http://localhost:70/Flutter/index.php';
+      ? 'http://10.0.2.2:70/Flutter1/index.php'
+      : 'http://localhost:70/Flutter1/index.php';
 
-  Future<dynamic> updateData(String id, String nama, String jurusan) async {
+  Future<dynamic> updateData(String id, String nama, int jumlah,String catatan) async {
     // print("updating");
     Map<String, String> headers = {'Content-Type': 'application/json'};
-    String jsonBody = '{"id":$id,"nama": "$nama", "jurusan": "$jurusan"}';
+    String jsonBody = '{"id":$id,"nama": "$nama", "jumlah": "$jumlah" ,"catatan": "$catatan"}';
     var response = await http.put(Uri.parse("$url?id=$id"),
         headers: headers, body: jsonBody);
 
@@ -44,7 +45,8 @@ class _EditDataState extends State<EditData> {
       final Map<String, dynamic> data = json.decode(response.body);
       setState(() {
         namaController.text = data['nama'];
-        jurusanController.text = data['jurusan'];
+        jumlahController.text= data['jumlah'];
+        catatanController.text = data['catatan'];
       });
     } else {
       return null;
@@ -61,7 +63,7 @@ class _EditDataState extends State<EditData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Data Mahasiswa'),
+        title: const Text('Edit Data Transaksi'),
       ),
       drawer: const SideMenu(),
       body: Container(
@@ -72,24 +74,25 @@ class _EditDataState extends State<EditData> {
             TextField(
               controller: namaController,
               decoration: const InputDecoration(
-                hintText: 'Nama Mahasiswa',
+                hintText: 'Nama Transaksi',
               ),
             ),
             TextField(
-              controller: jurusanController,
+              controller: catatanController,
               decoration: const InputDecoration(
-                hintText: 'Jurusan',
+                hintText: 'catatan',
               ),
             ),
             ElevatedButton(
-              child: const Text('Edit Mahasiswa'),
+              child: const Text('Edit Transaksi'),
               onPressed: () {
                 String nama = namaController.text;
-                String jurusan = jurusanController.text;
+                int jumlah = int.parse(jumlahController.text);
+                String catatan = catatanController.text;
 
-                // updateData(widget.id,nama, jurusan);
+                // updateData(widget.id,nama, catatan);
 
-                updateData(widget.id, nama, jurusan).then((result) {
+                updateData(widget.id, nama, jumlah, catatan).then((result) {
                   print(result);
                   if (result['pesan'] == 'berhasil') {
                     showDialog(

@@ -5,7 +5,7 @@ header("Content-Type: application/json; charset=UTF-8");
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "belajar_flutter";
+$dbname = "transaksi";
 $conn = new mysqli($servername, $username, $password,
 $dbname);
 if ($conn->connect_error) {

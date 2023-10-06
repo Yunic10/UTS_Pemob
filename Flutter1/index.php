@@ -5,39 +5,40 @@ $method = $_SERVER["REQUEST_METHOD"];
 if ($method === "GET") {
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
-        $sql = "SELECT * FROM mahasiswa WHERE id = $id";
+        $sql = "SELECT * FROM transaksi WHERE id = $id";
         
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
-            $mahasiswa = $result->fetch_assoc();
-            echo json_encode($mahasiswa);
+            $transaksi = $result->fetch_assoc();
+            echo json_encode($transaksi);
         } else {
-            echo "Data mahasiswa dengan ID $id tidak ditemukan.";
+            echo "Data transaksi dengan ID $id tidak ditemukan.";
         }
     } 
     else {
-        $sql = "SELECT * FROM mahasiswa";
+        $sql = "SELECT * FROM transaksi";
         $result = $conn->query($sql);
         
         if ($result->num_rows > 0) {
-            $mahasiswa = array();
+            $transaksi = array();
             while ($row = $result->fetch_assoc()) {
-                $mahasiswa[] = $row;
+                $transaksi[] = $row;
             }
-            echo json_encode($mahasiswa);
+            echo json_encode($transaksi);
         } else {
-            echo "Data mahasiswa kosong.";
+            echo "Data transaksi kosong.";
         }
     }
 }
 
 
 if ($method === "POST") {
-    // Menambahkan data mahasiswa
+    // Menambahkan data transaksi
    $data = json_decode(file_get_contents("php://input"), true);
    $nama = $data["nama"];
-   $jurusan = $data["jurusan"];
-   $sql = "INSERT INTO mahasiswa (nama, jurusan) VALUES ('$nama', '$jurusan')";
+   $catatan = $data["catatan"];
+   $jumlah = $data["jumlah"];
+   $sql = "INSERT INTO transaksi (nama, jumlah, catatan) VALUES ('$nama', '$jumlah', '$catatan')";
    if ($conn->query($sql) === TRUE) {
    $data['pesan'] = 'berhasil';
    //echo "Berhasil tambah data";
@@ -48,12 +49,13 @@ if ($method === "POST") {
    } 
 
    if ($method === "PUT") {
-    // Memperbarui data mahasiswa
+    // Memperbarui data transaksi
         $data = json_decode(file_get_contents("php://input"), true);
         $id = $data["id"];
         $nama = $data["nama"];
-        $jurusan = $data["jurusan"];
-        $sql = "UPDATE mahasiswa SET nama='$nama', jurusan='$jurusan' WHERE id=$id";
+        $jumlah = $data["jumlah"];
+        $catatan = $data["catatan"];
+        $sql = "UPDATE transaksi SET nama='$nama',jumlah = '$jumlah', catatan='$catatan' WHERE id=$id";
         if ($conn->query($sql) === TRUE) {
             $data['pesan'] = 'berhasil';
         } else {
@@ -63,9 +65,9 @@ if ($method === "POST") {
    } 
 
    if ($method === "DELETE") {
-    // Menghapus data mahasiswa
+    // Menghapus data transaksi
    $id = $_GET["id"];
-   $sql = "DELETE FROM mahasiswa WHERE id=$id";
+   $sql = "DELETE FROM transaksi WHERE id=$id";
    if ($conn->query($sql) === TRUE) {
    $data['pesan'] = 'berhasil';
    } else {
